@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Final</string>
+    <string name="rl">Relationship with Person</string>
+    <string name="sex">Sex</string>
+
+    <string-array name="relation_array">
+        <item>Relationship with Person</item>
+        <item>Parent</item>
+        <item>Child</item>
+        <item>Spouse</item>
+        <item>Sibling</item>
+        <item>Grand Parents</item>
+        <item>Grand Childs</item>
+        <item>Aunt/Uncle</item>
+        <item>Friend</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sex_array">
+        <item>Sex</item>
+        <item>
+            Male
+        </item>
+        <item>
+            Female
+        </item>
+        <item>
+            Transgender
+        </item>
+    </string-array>
+
+</resources>
