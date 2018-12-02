@@ -1,6 +1,9 @@
 package com.example.jesna.emhealth;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,20 +31,27 @@ public class Answer_Question extends AppCompatActivity {
     TextView tit;
     RadioButton opt1, opt2, opt3, opt4;
     Button next;
-    String question[], answer[];
     String value;
+    String sharedemail;
+    String qid=Integer.toString(0);
+    int i=0;
     public static TextView qst;
-    String URL_POST = "https://servetechnoresearch.com/Emotion/response.php";
-    String URL_POST_fetch = "https://servetechnoresearch.com/Emotion/fetch_question.php";
+    String URL_POST = "https://emhealth.000webhostapp.com/response.php";
+    String URL_POST_fetch = "https://emhealth.000webhostapp.com/fetch_question.php";
 
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button btnDisplay;
+    Intent intent;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent hupintent=getIntent();
+        sharedemail=((Intent) hupintent).getStringExtra("HUPEmail");
+      //  Toast.makeText(Answer_Question.this,sharedemail,Toast.LENGTH_SHORT).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer__question);
         addListenerOnButton();
@@ -55,13 +65,9 @@ public class Answer_Question extends AppCompatActivity {
         opt3 = findViewById(R.id.radioButton5);
         opt4 = findViewById(R.id.radioButton6);
 
-        //next = findViewById(R.id.next);
 
-        //   fetchData process = new fetchData();
-        // process.execute();
 
-        DisplayQuestion();
-
+        DisplayQuestion(0);
 
     }
 
@@ -77,8 +83,7 @@ public class Answer_Question extends AppCompatActivity {
                 // find the radiobutton by returned id
                 radioButton = (RadioButton) findViewById(selectedId);
 
-                Toast.makeText(Answer_Question.this,
-                        radioButton.getText(), Toast.LENGTH_SHORT).show();
+
                 if (radioButton== opt1)
                 {
                     value="1";
@@ -96,14 +101,35 @@ public class Answer_Question extends AppCompatActivity {
                     value="4";
                 }
 
-                InsertRESPONSE();
+                i++;
+
+
+                if(i==20)
+                {
+                    InsertRESPONSE();
+                    Intent intent = new Intent(Answer_Question.this, Stage1.class);
+                    intent.putExtra("HUPEmail",sharedemail);
+                    startActivity(intent);
                 }
+
+                if(i!=20) {
+                    InsertRESPONSE();
+                    DisplayQuestion(i);
+                    qid=Integer.toString(i);
+                    radioGroup.clearCheck();
+
+                }
+
+
+
+            }
 
         }
         );
 
 
     }
+
 
 
 
@@ -126,9 +152,10 @@ public class Answer_Question extends AppCompatActivity {
             protected Map<String,String> getParams()throws AuthFailureError {
                 Map<String,String> params=new HashMap<String,String>();
 
+                params.put("RMAIL",sharedemail);
+                params.put("QID",qid);
                 params.put("RESPONSE",value);
-                params.put("RID","111");
-                params.put("ID","222");
+
 
                 return params;
 
@@ -142,7 +169,7 @@ public class Answer_Question extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-        private void DisplayQuestion () {
+        private void DisplayQuestion (final int i) {
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POST_fetch, new Response.Listener<String>() {
                 @Override
@@ -150,9 +177,10 @@ public class Answer_Question extends AppCompatActivity {
 
 
                     try {
-
                         JSONArray array = new JSONArray(response);
-                        JSONObject object = array.getJSONObject(0);
+                       // JSONObject object = array.getJSONObject(0);
+                        JSONObject object = array.getJSONObject(i);
+                      //  qid=count+1;
                         String questionn = object.getString("QUESTION");
                         String op1 = object.getString("OPTION1");
                         String op2 = object.getString("OPTION2");

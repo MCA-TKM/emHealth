@@ -26,7 +26,7 @@ public class Normal extends AppCompatActivity {
     EditText age;
     EditText pass;
     Spinner gender;
-    String URL_POST="https://servetechnoresearch.com/Emotion/hupreg.php";
+    String URL_POST="https://emhealth.000webhostapp.com/registration.php";
     String value1;
     String value2;
     String value3 ;
@@ -48,7 +48,14 @@ public class Normal extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InsertSV();
+
+                if(name.getText().toString().equals("")||email.getText().toString().equals("")||gender.getSelectedItem().toString().equals("")||age.getText().toString().equals("")||pass.getText().toString().equals(""))
+                {
+                    Toast.makeText(Normal.this,"PLEASE FILL THE DETAILS !",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    InsertSV();
+                }
             }
         });
     }
