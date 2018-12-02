@@ -2,7 +2,7 @@
 
 $con= new mysqli('localhost','id7967766_emhealth','emhealth','id7967766_emhealth')or die("Could not connect to mysql".mysqli_error($con));
 
-$qr="select * from QUESTIONNAIRE";
+$qr="select * from FEATURES  where FMAIL='$_POST[DMAIL]'";
 
 $result = mysqli_query($con, $qr);
 
